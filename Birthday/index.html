@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Google Font -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif; /* Change font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full height for better visibility */
+            margin: 0; /* Remove default margin */
+            overflow: hidden; /* Prevent scrolling */
+            background-image: url('bg3 (1).jpg'); /* Background image for the first page */
+            background-size: cover; /* Ensure background covers the whole page */
+            background-repeat: no-repeat; /* Prevent repeating the background */
+            background-position: center; /* Center the background image */
+            color: white; /* Change text color for better visibility */
+            text-align: center;
+            transition: background-image 0.5s; /* Smooth transition for background */
+        }
+
+        #main-image {
+            width: 300px; /* Adjust as needed */
+            transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition for opacity and transform */
+            opacity: 0; /* Start hidden */
+            transform: scale(0.8); /* Start slightly smaller */
+        }
+
+        #main-text {
+            font-size: 1.5em; /* Adjust font size as needed */
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Add shadow for better visibility */
+            max-width: 80%; /* Limit width for better text wrapping */
+        }
+
+        #gun {
+            cursor: pointer;
+            width: 300px; /* Adjust size as needed */
+            transition: transform 0.1s; /* Add a slight animation effect */
+        }
+
+        /* Adjust content position */
+        #content {
+            margin-top: -160px; /* Adjust this value to move the gun higher or lower */
+        }
+
+        /* Bullet animation */
+        .bullet {
+            position: absolute;
+            width: 20px; /* Increased bullet size */
+            height: 15px; /* Increased bullet size */
+            background: radial-gradient(circle, rgba(255, 215, 0, 1) 0%, rgba(255, 140, 0, 1) 100%); /* Glowing effect */
+            border-radius: 10px; /* Round edges */
+            animation: fire 3.0s forwards; /* Slower animation speed */
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 140, 0, 0.5); /* Glow effect */
+        }
+
+        @keyframes fire {
+            from {
+                transform: translateX(0) translateY(0); /* Start position */
+                opacity: 1;
+            }
+            to {
+                transform: translateX(300px) translateY(-50px); /* End position */
+                opacity: 0; /* Fade out */
+            }
+        }
+
+        /* Fire effect */
+        .fire {
+            position: absolute;
+            width: 10px; /* Size of fire */
+            height: 10px; /* Size of fire */
+            background-color: orange; /* Fire color */
+            border-radius: 50%; /* Round shape */
+            animation: fireEffect 1.0s forwards; /* Fire effect animation */
+        }
+
+        @keyframes fireEffect {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-20px); /* Move upward */
+                opacity: 0; /* Fade out */
+            }
+        }
+
+        /* Next page styles */
+        #next-page {
+            display: none; /* Hidden by default */
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center items horizontally */
+            height: 100vh; /* Full height for better positioning */
+            background-image: url('bg4.jpg'); /* Background image for the second page */
+            background-size: cover; /* Ensure the background covers the entire section */
+            background-repeat: no-repeat; /* Prevent repeating the background */
+            background-position: center; /* Center the background image */
+        }
+
+        /* Heart emojis */
+        .hearts {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .heart {
+            font-size: 2em; /* Adjust size as needed */
+        }
+
+        /* Media queries for responsive design */
+        @media (max-width: 600px) {
+            body {
+                background-size: contain; /* Change to contain for smaller screens */
+                background-position: top; /* Adjust position for smaller screens */
+            }
+
+            #main-image {
+                width: 200px; /* Make main image smaller on mobile */
+                transform: scale(0.6); /* Scale down for mobile */
+            }
+
+            #gun {
+                width: 200px; /* Make gun smaller on mobile */
+            }
+
+            #main-text {
+                font-size: 1em; /* Smaller text on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <img id="gun" src="gun.png" alt="Gun Image" title="Click to Fire!">
+    </div>
+    <div id="next-page">
+        <div class="hearts">
+            <span class="heart">❤️</span>
+            <span class="heart">❤️</span>
+        </div>
+        <p id="main-text"></p>
+        <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+            <img id="main-image" src="pic1.png" alt="Birthday Image">
+        </div>
+    </div>
+    <script>
+        const images = [
+            { 
+                text: 'Cutuuu whooo?? Yeahh..! It\'s youuu♥️ Cutuu turns 21🎉 Wishing you the happiest of birthdays aruuu💗🫂 "YOU MATTER THE MOST" "YOU ARE LOVED" by me the most and "YOU WILL BE LOVED" no matter what the situation is!!! Yeahh I\'ll talk about it some other dayyy. MANY MORE HAPPY RETURNS OF THE DAY ARUUU💗✨ TAKE CARE CUTOO🫂', 
+                src: 'pic1.jpeg' 
+            },
+        ];
+
+        let currentIndex = 0;
+
+        const gun = document.getElementById('gun');
+        const mainImage = document.getElementById('main-image');
+        const mainText = document.getElementById('main-text');
+        const nextPage = document.getElementById('next-page');
+        const content = document.getElementById('content');
+
+        gun.addEventListener('click', showNextPage);
+
+        function showNextPage() {
+            // Create and fire bullet
+            const bullet = document.createElement('div');
+            bullet.classList.add('bullet');
+            document.body.appendChild(bullet);
+
+            // Create fire effect
+            const fire = document.createElement('div');
+            fire.classList.add('fire');
+            document.body.appendChild(fire);
+
+            // Position bullet at gun's location
+            const gunRect = gun.getBoundingClientRect();
+            bullet.style.left = `${gunRect.right}px`; // Start at the right edge of the gun
+            bullet.style.top = `${gunRect.top + gunRect.height / 2 - 8}px`; // Center vertically
+
+            // Position fire effect at gun's location
+            fire.style.left = `${gunRect.right - 20}px`; // Position near the gun
+            fire.style.top = `${gunRect.top + gunRect.height / 2 - 10}px`; // Center vertically
+
+            // Start the firing animation
+            bullet.addEventListener('animationend', () => {
+                bullet.remove(); // Remove bullet after animation
+                fire.remove(); // Remove fire after animation
+                // Hide the gun and show the next page
+                content.style.display = 'none';
+                nextPage.style.display = 'flex';
+                // Remove background image
+                document.body.style.backgroundImage = 'none';
+                // Set the image and text for the first page
+                updatePage();
+            });
+        }
+
+        function updatePage() {
+            if (currentIndex < images.length) {
+                mainImage.src = images[currentIndex].src;
+
+                // Start displaying text word by word
+                displayTextWordByWord(images[currentIndex].text);
+
+                // Fade in effect for the image
+                mainImage.style.opacity = '0'; // Start hidden
+                mainImage.style.transform = 'scale(0.8)'; // Start smaller
+                setTimeout(() => {
+                    mainImage.style.opacity = '1'; // Fade in
+                    mainImage.style.transform = 'scale(1)'; // Scale to normal size
+                }, 50); // Delay to trigger the transition
+
+                currentIndex++;
+            }
+        }
+
+        function displayTextWordByWord(text) {
+            const words = text.split(' ');
+            mainText.textContent = ''; // Clear existing text
+
+            words.forEach((word, index) => {
+                setTimeout(() => {
+                    mainText.textContent += (index === 0 ? '' : ' ') + word; // Add space before words except the first
+                }, index * 300); // Delay for each word (300 ms)
+            });
+        }
+    </script>
+</body>
+</html>
